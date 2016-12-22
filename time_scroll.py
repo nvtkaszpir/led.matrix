@@ -4,7 +4,7 @@ https://github.com/rm-hull/max7219
 """
 
 import max7219.led as led
-from max7219.font import CP437_FONT, SINCLAIR_FONT, LCD_FONT, UKR_FONT, TINY_FONT
+from max7219.font import proportional, CP437_FONT, SINCLAIR_FONT, LCD_FONT, UKR_FONT, TINY_FONT
 
 import datetime
 import click
@@ -26,13 +26,14 @@ fonts = {
 @click.option('--f', default='LCD_FONT', help='font to use: ' + ', '.join(fonts.keys()))
 @click.option('--a', default=8*" " + "...", help='append text after time, default "       ..."')
 @click.option('--p', default="", help='prepend text before time, default is empty')
-def main(a, b, d, f, p):
+@click.option('--t', default="%H:%M", help='time format, default %H:%M')
+def main(a, b, d, f, p, t):
     device = led.matrix(cascaded=2)
     device.brightness(b) # min 0..15 max
     device.orientation(270) # hdmi must be to the top
     now = datetime.datetime.now()
-    text = p + now.strftime("%H:%M") + a
-    device.show_message(text=text, delay=d, font=fonts[f])
+    text = p + now.strftime(t) + a
+    device.show_message(text=text, delay=d, font=proportional(fonts[f]))
 
 
 if __name__ == '__main__':
