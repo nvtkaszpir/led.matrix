@@ -19,7 +19,7 @@ from luma.core.legacy.font import (
     LCD_FONT,
 )
 
-contrast = 0  # 0..16
+contrast = 8  # 0..16
 font = TINY_FONT
 
 
@@ -42,7 +42,7 @@ def loop(n, block_orientation, rotate, inreverse, time_format="%H%M", font=font)
 
         with canvas(device) as draw:
             text(draw, (0, 0), msg, fill="white", font=font)
-        device.contrast(8)
+        device.contrast(contrast)
         time.sleep(1)
 
 
