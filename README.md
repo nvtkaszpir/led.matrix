@@ -17,16 +17,18 @@
 sudo usermod -a -G spi,gpio pi
 sudo apt-get update
 sudo apt install build-essential python-dev python-pip libfreetype6-dev libjpeg-dev libopenjp2-7 libtiff5 git
-sudo pip3 install -r requirements.txt
+
 mkdir -p /home/pi/src
 cd /home/pi/src/
 git clone https://github.com/nvtkaszpir/led.matrix.git
 cd led.matrix
-sudo cp led-matrix-clock.service /lib/systemd/system/
+sudo pip3 install -r requirements.txt
+sudo cp -f led-matrix-clock.service /lib/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable led-matrix-clock
 sudo systemctl start led-matrix-clock
 ```
+
 ## Known limitations
 
 - when started another clock.py and then it is shut down then display is black, need to restart service
