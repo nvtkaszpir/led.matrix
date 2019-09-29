@@ -23,7 +23,7 @@ contrast = 8  # 0..16
 font = TINY_FONT
 
 
-def loop(n, block_orientation, rotate, inreverse, time_format="%H%M", font=font):
+def loop(n, block_orientation, rotate, inreverse, time_format="%H:%M", font=font):
     print("Initializing device")
     # create matrix device
     serial = spi(port=0, device=0, gpio=noop())
@@ -39,9 +39,14 @@ def loop(n, block_orientation, rotate, inreverse, time_format="%H%M", font=font)
     while True:
         now = datetime.datetime.now()
         msg = now.strftime(time_format)
-
+        # draw each letter separately, to allow to have colon sign
+        # still, hours are more squeezed than minutes for readibility
         with canvas(device) as draw:
-            text(draw, (0, 0), msg, fill="white", font=font)
+            text(draw, (0, 0), msg[0], fill="white", font=proportional(font))
+            text(draw, (3, 0), msg[1], fill="white", font=proportional(font))
+            text(draw, (7, 0), msg[2], fill="white", font=proportional(font))
+            text(draw, (9, 0), msg[3], fill="white", font=proportional(font))
+            text(draw, (13, 0), msg[4], fill="white", font=proportional(font))
         device.contrast(contrast)
         time.sleep(1)
 
@@ -81,7 +86,7 @@ if __name__ == "__main__":
     )
 
     parser.add_argument(
-        "--time-format", type=str, default="%H%M", help="fime format to use"
+        "--time-format", type=str, default="%H:%M", help="fime format to use"
     )
 
     args = parser.parse_args()
