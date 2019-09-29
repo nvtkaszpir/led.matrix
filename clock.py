@@ -18,8 +18,11 @@ from luma.core.legacy.font import (
     SINCLAIR_FONT,
     LCD_FONT,
 )
-contrast = 0 # 0..16
+
+contrast = 0  # 0..16
 font = TINY_FONT
+
+
 def loop(n, block_orientation, rotate, inreverse, time_format="%H%M", font=font):
     print("Initializing device")
     # create matrix device
@@ -78,16 +81,18 @@ if __name__ == "__main__":
     )
 
     parser.add_argument(
-        "--time-format",
-        type=str,
-        default="%H%M",
-        help="fime format to use",
+        "--time-format", type=str, default="%H%M", help="fime format to use"
     )
-
 
     args = parser.parse_args()
 
     try:
-        loop(args.cascaded, args.block_orientation, args.rotate, args.reverse_order,args.time_format)
+        loop(
+            args.cascaded,
+            args.block_orientation,
+            args.rotate,
+            args.reverse_order,
+            args.time_format,
+        )
     except KeyboardInterrupt:
         pass
