@@ -23,7 +23,15 @@ contrast = 8  # 0..16
 font = TINY_FONT
 
 
-def loop(n, block_orientation, rotate, inreverse, time_format="%H:%M", font=font):
+def loop(
+    n,
+    block_orientation,
+    rotate,
+    inreverse,
+    time_format="%H:%M",
+    no_zero=True,
+    font=font,
+):
     print("Initializing device")
     # create matrix device
     serial = spi(port=0, device=0, gpio=noop())
@@ -38,7 +46,14 @@ def loop(n, block_orientation, rotate, inreverse, time_format="%H:%M", font=font
     print("Starting infinite loop")
     while True:
         now = datetime.datetime.now()
-        msg = now.strftime(time_format)
+        msg_time = now.strftime(time_format)
+
+        # convert first zero to space, notice that %-H produces hours without spaces
+        if no_zero and (msg_time[0] == "0"):
+            msg = " " + msg_time[1:]
+        else:
+            msg = msg_time
+
         # draw each letter separately, to allow to have colon sign
         # still, hours are more squeezed than minutes for readibility
         with canvas(device) as draw:
@@ -86,7 +101,13 @@ if __name__ == "__main__":
     )
 
     parser.add_argument(
-        "--time-format", type=str, default="%H:%M", help="fime format to use"
+        "--time-format", type=str, default="%H:%M", help="Time format to use"
+    )
+    parser.add_argument(
+        "--no-zero",
+        type=bool,
+        default=True,
+        help="Remove zero from hour, so that '08:12' becomes ' 8:12'",
     )
 
     args = parser.parse_args()
@@ -98,6 +119,7 @@ if __name__ == "__main__":
             args.rotate,
             args.reverse_order,
             args.time_format,
+            args.no_zero,
         )
     except KeyboardInterrupt:
         pass
