@@ -5,7 +5,8 @@ Description=RaspberryPi 3 led matrix 16x8 clock
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/python3 /home/pi/src/led.matrix/clock.py
+Environment=TZ=Europe/Warsaw
+ExecStart=/home/pi/src/led.matrix/.venv/bin/python3 /home/pi/src/led.matrix/clock.py
 Restart=always
 RestartSec=15
 User=pi
